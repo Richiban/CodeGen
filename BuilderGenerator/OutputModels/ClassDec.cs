@@ -7,9 +7,9 @@ namespace BuilderGenerator
     {
         public ClassDec(
             string name,
-            Constructor constructor = null,
-            Visibility visibility = null,
-            string baseClass = null,
+            Constructor? constructor = null,
+            Visibility? visibility = null,
+            string? baseClass = null,
             bool isPartial = false,
             params IWriteableCode[] contents)
         {
@@ -26,7 +26,7 @@ namespace BuilderGenerator
         public Visibility Visibility { get; }
         public bool IsPartial { get; }
         public IReadOnlyCollection<IWriteableCode> Contents { get; }
-        public string BaseClass { get; }
+        public string? BaseClass { get; }
 
         public void WriteTo(CodeBuilder cb)
         {

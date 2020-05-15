@@ -18,7 +18,7 @@ namespace BuilderGenerator
                 Visibility visibility,
                 IReadOnlyCollection<Parameter> parameters,
                 IReadOnlyCollection<AssignmentStatement> constructorAssignments,
-                IReadOnlyCollection<string> baseCall = null)
+                IReadOnlyCollection<string>? baseCall = null)
             {
                 Name = name;
                 Visibility = visibility;
@@ -31,7 +31,7 @@ namespace BuilderGenerator
             public IReadOnlyCollection<Parameter> Parameters { get; }
             public IReadOnlyCollection<AssignmentStatement> Statements;
             public Visibility Visibility { get; }
-            public IReadOnlyCollection<string> BaseCall { get; }
+            public IReadOnlyCollection<string>? BaseCall { get; }
 
             public override void WriteTo(CodeBuilder codeBuilder)
             {

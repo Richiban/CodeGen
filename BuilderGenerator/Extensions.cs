@@ -41,7 +41,7 @@ namespace BuilderGenerator
             return attributes.Any(al => al.Attributes.Any(a => a.Name.ToString() == shortname || a.Name.ToString() == fullname));
         }
 
-        public static T FindParent<T>(this SyntaxNode node) where T : class
+        public static T? FindParent<T>(this SyntaxNode node) where T : class
         {
             var current = node;
             while (true)

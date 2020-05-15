@@ -8,32 +8,26 @@ namespace Sample
     [GenerateBuilder]
     public partial class Person
     {
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public DateTime? BirthDate { get; private set; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public DateTime? BirthDate { get; }
+        public string? A { get; }
+        public string B { get; } = "B val";
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            var myDataClass = new Person.Builder
-            {
-                FirstName = "Alex",
-                LastName = "Foos"
-            }
-                .Build();
-
-            Console.WriteLine(JsonConvert.SerializeObject(myDataClass, Formatting.Indented));
-
             Console.WriteLine("==== Builder Validation ====");
             try
             {
-                new Person.Builder
+                var myDataClass = new Person.Builder
                 {
                     FirstName = "John"
                 }
                     .Build();
+                Console.WriteLine(JsonConvert.SerializeObject(myDataClass, Formatting.Indented));
             }
             catch (Person.Builder.ValidationException ex)
             {
