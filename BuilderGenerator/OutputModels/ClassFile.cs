@@ -4,9 +4,9 @@
     {
         private readonly string usings;
         private readonly string? namespaceName;
-        private readonly ClassDec classDec;
+        private readonly ClassDeclaration classDec;
 
-        public ClassFile(string usings, string? namespaceName, ClassDec classDec)
+        public ClassFile(string usings, string? namespaceName, ClassDeclaration classDec)
         {
             this.usings = usings;
             this.namespaceName = namespaceName;

@@ -31,7 +31,7 @@ namespace BuilderGenerator
 
             if (DefaultValue != null)
             {
-                codeBuilder.Append($" {DefaultValue}");
+                codeBuilder.Append($" {DefaultValue};");
             }
 
             codeBuilder.AppendLine("");

@@ -6,7 +6,7 @@ namespace BuilderGenerator
 {
     public class RecordConverter
     {
-        public ClassDec RecordToClass(RecordDeclaration record)
+        public ClassDeclaration RecordToClass(RecordDeclaration record)
         {
             var constructorParams = record.RecordProperties
                 .Select(p => new Parameter(p.Name, p.Type))
@@ -16,11 +16,12 @@ namespace BuilderGenerator
                 .Select(p => new AssignmentStatement($"this.{p.Name}", p.Name))
                 .ToArray();
 
-            var validateMethod = new Method(
+            var validateMethod = new MethodDeclaration(
                 "Validate",
                 "void",
                 Visibility.Public,
-                false,
+                isStatic: false,
+                isOverride: false,
                 new Parameter[] { },
                 new IWriteableCode[] { new Statement("var errors = new System.Collections.Generic.List<string>();") }
                     .Concat(record.RecordProperties
@@ -30,25 +31,72 @@ namespace BuilderGenerator
                 "if (errors.Count > 0) throw new ValidationException(errors);") })
                     .ToArray());
 
-            var buildMethod = new Method(
+            var buildMethod = new MethodDeclaration(
                 "Build",
                 record.Name,
                 Visibility.Public,
-                false,
+                isStatic: false,
+                isOverride: false,
                 new Parameter[] { },
                 new IWriteableCode[] {
                     new Statement("Validate();"),
                     new ConstructorCall(record.Name, record.RecordProperties.Select(p => p.Name).ToArray()) });
 
-            var builderException = new ClassDec(
+            var builderException = BuildBuilderExceptionDefinition();
+
+            var toStringMethod = BuildToStringMethod(record);
+
+            var builderProps = record.RecordProperties
+                .Select(p => new Property(p.Name, p.Type, true, Visibility.Public, p.DefaultValue))
+                .Cast<IWriteableCode>()
+                .Concat(new IWriteableCode[] { validateMethod, buildMethod, builderException })
+                .ToArray();
+
+            var builderClass = new ClassDeclaration("Builder", visibility: Visibility.Public, contents: builderProps);
+
+            var output = new ClassDeclaration(
+                record.Name,
+                new Constructor.BlockConstructor(record.Name, Visibility.Public, constructorParams, constructorAssignments),
+                Visibility.Public,
+                null,
+                true,
+                contents: new IWriteableCode[] { toStringMethod, builderClass });
+
+            return output;
+        }
+
+        private MethodDeclaration BuildToStringMethod(RecordDeclaration record)
+        {
+            var propNames = String.Join($",{Environment.NewLine}", record.RecordProperties.Select(p => $"$\"{p.Name} = {{{p.Name}}}\""));
+
+            var statements = new IWriteableCode[] {
+                new Statement($"var elements = new string[] {{ {propNames} }};"),
+                new Statement($"var s = System.String.Join(\", \", elements);"),
+                new Statement($"return $\"{record.Name} {{{{ {{s}} }}}}\";")
+            };
+
+            return new MethodDeclaration(
+                "ToString",
+                "string",
+                Visibility.Public,
+                isStatic: false,
+                isOverride: true,
+                parameters: new Parameter[] { }, 
+                contents: statements);
+        }
+
+        private static ClassDeclaration BuildBuilderExceptionDefinition()
+        {
+            return new ClassDeclaration(
                 "ValidationException",
                 visibility: Visibility.Public,
                 contents: new IWriteableCode[] {
                     new Property("Errors", "System.Collections.Generic.IReadOnlyCollection<string>", hasSetter: false, visibility: Visibility.Public, defaultValue: null),
-                    new Method(
+                    new MethodDeclaration(
                         "GetMessage", "string",
                         Visibility.Private,
                         isStatic: true,
+                        isOverride: false,
                         parameters: new Parameter[] {new Parameter("errors", "System.Collections.Generic.IReadOnlyCollection<string>") },
                         contents: new IWriteableCode[] { new Statement("return string.Join(System.Environment.NewLine, errors);")}) },
                         baseClass: "System.Exception",
@@ -58,24 +106,6 @@ namespace BuilderGenerator
                             parameters: new[] { new Parameter("errors", "System.Collections.Generic.IReadOnlyCollection<string>") },
                             baseCall: new[] { "GetMessage(errors)" },
                             constructorAssignments: new[] { new AssignmentStatement("Errors", "errors") }));
-
-            var builderProps = record.RecordProperties
-                .Select(p => new Property(p.Name, p.Type, true, Visibility.Public, p.DefaultValue))
-                .Cast<IWriteableCode>()
-                .Concat(new IWriteableCode[] { validateMethod, buildMethod, builderException })
-                .ToArray();
-
-            var builderClass = new ClassDec("Builder", visibility: Visibility.Public, contents: builderProps);
-
-            var output = new ClassDec(
-                record.Name,
-                new Constructor.BlockConstructor(record.Name, Visibility.Public, constructorParams, constructorAssignments),
-                Visibility.Public,
-                null,
-                true,
-                builderClass);
-
-            return output;
         }
 
         public RecordDeclaration ClassToRecord(ClassDeclarationSyntax classDeclaration)

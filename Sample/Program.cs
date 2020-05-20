@@ -24,10 +24,12 @@ namespace Sample
             {
                 var myDataClass = new Person.Builder
                 {
-                    FirstName = "John"
+                    FirstName = "Alex",
+                    LastName = "Bloggs"
                 }
                     .Build();
-                Console.WriteLine(JsonConvert.SerializeObject(myDataClass, Formatting.Indented));
+
+                Console.WriteLine(myDataClass);
             }
             catch (Person.Builder.ValidationException ex)
             {

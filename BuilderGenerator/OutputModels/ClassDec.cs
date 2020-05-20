@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace BuilderGenerator
 {
-    public class ClassDec : IWriteableCode
+    public class ClassDeclaration : IWriteableCode
     {
-        public ClassDec(
+        public ClassDeclaration(
             string name,
             Constructor? constructor = null,
             Visibility? visibility = null,

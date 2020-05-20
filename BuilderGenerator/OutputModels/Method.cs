@@ -3,11 +3,14 @@ using System.Collections.Generic;
 
 namespace BuilderGenerator
 {
-    public class Method : IWriteableCode
+    public class MethodDeclaration : IWriteableCode
     {
-        public Method(
-            string name, string type, Visibility visibility,
+        public MethodDeclaration(
+            string name, 
+            string type, 
+            Visibility visibility,
             bool isStatic,
+            bool isOverride,
             IReadOnlyCollection<Parameter> parameters,
             IReadOnlyCollection<IWriteableCode> contents)
         {
@@ -15,6 +18,7 @@ namespace BuilderGenerator
             Type = type;
             Visibility = visibility;
             IsStatic = isStatic;
+            IsOverride = isOverride;
             Contents = contents;
             Parameters = parameters;
         }
@@ -23,6 +27,7 @@ namespace BuilderGenerator
         public String Type { get; }
         public Visibility Visibility { get; }
         public bool IsStatic { get; }
+        public bool IsOverride { get; }
         public IReadOnlyCollection<IWriteableCode> Contents { get; }
         public IReadOnlyCollection<Parameter> Parameters { get; }
 
@@ -33,6 +38,11 @@ namespace BuilderGenerator
             if (IsStatic)
             {
                 codeBuilder.Append("static ");
+            }
+
+            if (IsOverride)
+            {
+                codeBuilder.Append("override ");
             }
 
             codeBuilder.Append($"{Type} {Name}(");
