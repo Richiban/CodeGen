@@ -37,7 +37,7 @@ namespace BuilderGenerator
 
         private static IEnumerable<IPatternGenerator> GetEnhancersFor(ClassDeclarationSyntax c)
         {
-            if (c.AttributeLists.HasAttribute(nameof(GenerateBuilderAttribute)))
+            if (c.AttributeLists.HasAttribute(nameof(RecordBuilderAttribute)))
             {
                 yield return new BuilderPatternGenerator();
             }

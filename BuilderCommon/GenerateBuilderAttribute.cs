@@ -2,7 +2,7 @@ using System;
 
 namespace BuilderCommon
 {
-    public class GenerateBuilderAttribute : Attribute
+    public class RecordBuilderAttribute : Attribute
     {
         
     }

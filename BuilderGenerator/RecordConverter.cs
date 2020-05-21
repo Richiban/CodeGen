@@ -46,6 +46,10 @@ namespace BuilderGenerator
 
             var toStringMethod = BuildToStringMethod(record);
 
+            var equalsMethod = BuildEqualsMethod(record);
+
+            var objectEqualsMethod = BuildObjectEqualsMethod(record);
+
             var builderProps = record.RecordProperties
                 .Select(p => new Property(p.Name, p.Type, true, Visibility.Public, p.DefaultValue))
                 .Cast<IWriteableCode>()
@@ -75,7 +79,7 @@ namespace BuilderGenerator
                 Visibility.Public,
                 null,
                 true,
-                contents: new IWriteableCode[] { toStringMethod, builderClass });
+                contents: new IWriteableCode[] { toStringMethod, equalsMethod, objectEqualsMethod, builderClass });
 
             return output;
         }
@@ -96,7 +100,41 @@ namespace BuilderGenerator
                 Visibility.Public,
                 isStatic: false,
                 isOverride: true,
-                parameters: new Parameter[] { }, 
+                parameters: new Parameter[] { },
+                contents: statements);
+        }
+
+        private MethodDeclaration BuildEqualsMethod(RecordDeclaration record)
+        {
+            var propComparisons = record.RecordProperties.Select(p => $"{Environment.NewLine}&& Equals({p.Name}, other.{p.Name}) ");
+
+            var statements = new IWriteableCode[] {
+                new Statement($"return !(other is null) {String.Join("", propComparisons)};")
+            };
+
+            return new MethodDeclaration(
+                "Equals",
+                "bool",
+                Visibility.Public,
+                isStatic: false,
+                isOverride: false,
+                parameters: new [] { new Parameter("other", record.Name) },
+                contents: statements);
+        }
+
+        private MethodDeclaration BuildObjectEqualsMethod(RecordDeclaration record)
+        {
+            var statements = new IWriteableCode[] {
+                new Statement($"return this.Equals(other as {record.Name});")
+            };
+
+            return new MethodDeclaration(
+                "Equals",
+                "bool",
+                Visibility.Public,
+                isStatic: false,
+                isOverride: true,
+                parameters: new [] { new Parameter("other", "object") },
                 contents: statements);
         }
 

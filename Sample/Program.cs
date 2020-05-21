@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Sample
 {
-    [GenerateBuilder]
+    [RecordBuilder]
     public partial class Person
     {
         public string FirstName { get; }
@@ -38,6 +38,17 @@ namespace Sample
                 Console.WriteLine($"ReferenceEquals: {ReferenceEquals(a, b)}");
 
                 Console.WriteLine($"Equals: {Equals(a, b)}");
+
+                var c = new Person.Builder(b)
+                {
+                    LastName = "Blobbs"
+                }.Build();
+
+                Console.WriteLine($"c = {c}");
+
+                Console.WriteLine($"ReferenceEquals: {ReferenceEquals(b, c)}");
+
+                Console.WriteLine($"Equals: {Equals(b, c)}");
             }
             catch (Person.Builder.ValidationException ex)
             {

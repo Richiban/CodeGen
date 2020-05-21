@@ -36,11 +36,13 @@ using System;
 
 namespace Test
 {
-    public partial class RecordSubject
+    public partial class Person
     {
-        public string A { get; }
-        public string? B { get; }
-        public string C { get; } = """";
+        public string FirstName { get; }
+        public string LastName { get; }
+        public DateTime? BirthDate { get; }
+        public string? A { get; }
+        public string B { get; } = ""B val"";
     }
 }
 "
