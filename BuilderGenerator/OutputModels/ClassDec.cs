@@ -7,14 +7,14 @@ namespace BuilderGenerator
     {
         public ClassDeclaration(
             string name,
-            Constructor? constructor = null,
+            IReadOnlyCollection<Constructor>? constructors = null,
             Visibility? visibility = null,
             string? baseClass = null,
             bool isPartial = false,
             params IWriteableCode[] contents)
         {
             Name = name;
-            Constructor = constructor ?? new Constructor.None();
+            Constructors = constructors ?? new Constructor[0];
             Visibility = visibility ?? Visibility.None;
             BaseClass = baseClass;
             IsPartial = isPartial;
@@ -22,7 +22,7 @@ namespace BuilderGenerator
         }
 
         public string Name { get; }
-        public Constructor Constructor { get; }
+        public IReadOnlyCollection<Constructor> Constructors { get; }
         public Visibility Visibility { get; }
         public bool IsPartial { get; }
         public IReadOnlyCollection<IWriteableCode> Contents { get; }
@@ -49,7 +49,7 @@ namespace BuilderGenerator
 
             using (cb.Indent())
             {
-                Constructor?.WriteTo(cb);
+                cb.WriteAll(Constructors);
 
                 foreach (var item in Contents ?? new IWriteableCode[] { })
                 {

@@ -20,16 +20,24 @@ namespace Sample
         static void Main(string[] args)
         {
             Console.WriteLine("==== Builder Validation ====");
+
             try
             {
-                var myDataClass = new Person.Builder
+                var a = new Person.Builder
                 {
                     FirstName = "Alex",
                     LastName = "Bloggs"
-                }
-                    .Build();
+                }.Build();
 
-                Console.WriteLine(myDataClass);
+                var b = new Person.Builder(a).Build();
+
+                Console.WriteLine($"a = {a}");
+
+                Console.WriteLine($"b = {b}");
+
+                Console.WriteLine($"ReferenceEquals: {ReferenceEquals(a, b)}");
+
+                Console.WriteLine($"Equals: {Equals(a, b)}");
             }
             catch (Person.Builder.ValidationException ex)
             {

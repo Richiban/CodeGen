@@ -7,7 +7,7 @@ namespace BuilderGenerator
 {
     public static class Extensions
     {
-        public static void WriteAll(this CodeBuilder codeBuilder, IReadOnlyCollection<IWriteableCode> items, string joiner = "")
+        public static void WriteAll<T>(this CodeBuilder codeBuilder, IReadOnlyCollection<T> items, string joiner = "") where T : IWriteableCode
         {
             var isFirst = true;
 

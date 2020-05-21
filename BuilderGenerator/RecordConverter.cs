@@ -52,11 +52,26 @@ namespace BuilderGenerator
                 .Concat(new IWriteableCode[] { validateMethod, buildMethod, builderException })
                 .ToArray();
 
-            var builderClass = new ClassDeclaration("Builder", visibility: Visibility.Public, contents: builderProps);
+            var defaultConstructor = new Constructor(
+                "Builder",
+                Visibility.Public,
+                new Parameter[] { },
+                new AssignmentStatement[] { });
+
+            var copyConstructor = new Constructor(
+                "Builder",
+                Visibility.Public,
+                new[] { new Parameter("other", record.Name) },
+                record.RecordProperties.Select(p => new AssignmentStatement(p.Name, $"other.{p.Name}")).ToArray());
+
+            var builderClass = new ClassDeclaration(
+                "Builder",
+                new[] { defaultConstructor, copyConstructor }, 
+                visibility: Visibility.Public, contents: builderProps);
 
             var output = new ClassDeclaration(
                 record.Name,
-                new Constructor.BlockConstructor(record.Name, Visibility.Public, constructorParams, constructorAssignments),
+                new[] { new Constructor(record.Name, Visibility.Public, constructorParams, constructorAssignments) },
                 Visibility.Public,
                 null,
                 true,
@@ -100,12 +115,12 @@ namespace BuilderGenerator
                         parameters: new Parameter[] {new Parameter("errors", "System.Collections.Generic.IReadOnlyCollection<string>") },
                         contents: new IWriteableCode[] { new Statement("return string.Join(System.Environment.NewLine, errors);")}) },
                         baseClass: "System.Exception",
-                        constructor: new Constructor.BlockConstructor(
+                        constructors: new[] { new Constructor(
                             "ValidationException",
                             Visibility.Public,
                             parameters: new[] { new Parameter("errors", "System.Collections.Generic.IReadOnlyCollection<string>") },
                             baseCall: new[] { "GetMessage(errors)" },
-                            constructorAssignments: new[] { new AssignmentStatement("Errors", "errors") }));
+                            constructorAssignments: new[] { new AssignmentStatement("Errors", "errors") })});
         }
 
         public RecordDeclaration ClassToRecord(ClassDeclarationSyntax classDeclaration)
