@@ -8,47 +8,21 @@ namespace BuilderGenerator
     {
         public ClassDeclaration RecordToClass(RecordDeclaration record)
         {
-            var constructorParams = record.RecordProperties
-                .Select(p => new Parameter(p.Name, p.Type))
-                .ToArray();
-
-            var constructorAssignments = record.RecordProperties
-                .Select(p => new AssignmentStatement($"this.{p.Name}", p.Name))
-                .ToArray();
-
-            var validateMethod = new MethodDeclaration(
-                "Validate",
-                "void",
-                Visibility.Public,
-                isStatic: false,
-                isOverride: false,
-                new Parameter[] { },
-                new IWriteableCode[] { new Statement("var errors = new System.Collections.Generic.List<string>();") }
-                    .Concat(record.RecordProperties
-                        .Where(p => p.IsOptional == false)
-                        .Select(p => new Statement($"if ({p.Name} is null) errors.Add(\"{p.Name} is null\");")))
-                    .Concat(new IWriteableCode[] { new Statement(
-                "if (errors.Count > 0) throw new ValidationException(errors);") })
-                    .ToArray());
-
-            var buildMethod = new MethodDeclaration(
-                "Build",
-                record.Name,
-                Visibility.Public,
-                isStatic: false,
-                isOverride: false,
-                new Parameter[] { },
-                new IWriteableCode[] {
-                    new Statement("Validate();"),
-                    new ConstructorCall(record.Name, record.RecordProperties.Select(p => p.Name).ToArray()) });
-
-            var builderException = BuildBuilderExceptionDefinition();
-
             var toStringMethod = BuildToStringMethod(record);
-
             var equalsMethod = BuildEqualsMethod(record);
-
             var objectEqualsMethod = BuildObjectEqualsMethod(record);
+            var builderClass = GenerateBuilderClass(record);
+
+            var output = GenerateOutputClass(record, toStringMethod, equalsMethod, objectEqualsMethod, builderClass);
+
+            return output;
+        }
+
+        private static ClassDeclaration GenerateBuilderClass(RecordDeclaration record)
+        {
+            var buildMethod = GenerateBuildMethod(record);
+            var builderException = BuildBuilderExceptionDefinition();
+            var validateMethod = GenerateValidateMethod(record);
 
             var builderProps = record.RecordProperties
                 .Select(p => new Property(p.Name, p.Type, true, Visibility.Public, p.DefaultValue))
@@ -70,26 +44,69 @@ namespace BuilderGenerator
 
             var builderClass = new ClassDeclaration(
                 "Builder",
-                new[] { defaultConstructor, copyConstructor }, 
+                new[] { defaultConstructor, copyConstructor },
                 visibility: Visibility.Public, contents: builderProps);
+
+            return builderClass;
+        }
+
+        private static ClassDeclaration GenerateOutputClass(RecordDeclaration record, MethodDeclaration toStringMethod, MethodDeclaration equalsMethod, MethodDeclaration objectEqualsMethod, ClassDeclaration builderClass)
+        {
+            var constructorParams = record.RecordProperties
+                            .Select(p => new Parameter(p.Name, p.Type))
+                            .ToArray();
+
+            var constructorAssignments = record.RecordProperties
+                .Select(p => new AssignmentStatement($"this.{p.Name}", p.Name))
+                .ToArray();
 
             var output = new ClassDeclaration(
                 record.Name,
                 new[] { new Constructor(record.Name, Visibility.Public, constructorParams, constructorAssignments) },
                 Visibility.Public,
-                null,
-                true,
+                inheritsImplements: new [] { "" },
+                isPartial: true,
                 contents: new IWriteableCode[] { toStringMethod, equalsMethod, objectEqualsMethod, builderClass });
 
             return output;
         }
 
-        private MethodDeclaration BuildToStringMethod(RecordDeclaration record)
+        private static MethodDeclaration GenerateBuildMethod(RecordDeclaration record) =>
+                    new MethodDeclaration(
+                        "Build",
+                        record.Name,
+                        Visibility.Public,
+                        isStatic: false,
+                        isOverride: false,
+                        new Parameter[] { },
+                        new IWriteableCode[] {
+                    new Statement("Validate();"),
+                    new ConstructorCall(record.Name, record.RecordProperties.Select(p => p.Name).ToArray()) });
+
+        private static MethodDeclaration GenerateValidateMethod(RecordDeclaration record) =>
+                    new MethodDeclaration(
+                        "Validate",
+                        "void",
+                        Visibility.Public,
+                        isStatic: false,
+                        isOverride: false,
+                        new Parameter[] { },
+                        new IWriteableCode[] { new Statement("var errors = new System.Collections.Generic.List<string>();") }
+                            .Concat(record.RecordProperties
+                                .Where(p => p.IsOptional == false)
+                                .Select(p => new Statement($"if ({p.Name} is null) errors.Add(\"{p.Name} is null\");")))
+                            .Concat(new IWriteableCode[] { new Statement(
+                "if (errors.Count > 0) throw new ValidationException(errors);") })
+                            .ToArray());
+
+        private static MethodDeclaration BuildToStringMethod(RecordDeclaration record)
         {
             var propNames = String.Join($",{Environment.NewLine}", record.RecordProperties.Select(p => $"$\"{p.Name} = {{{p.Name}}}\""));
 
             var statements = new IWriteableCode[] {
+                new Statement($"var elements = new string[] {{"),
                 new Statement($"var elements = new string[] {{ {propNames} }};"),
+                new Statement($"}};"),
                 new Statement($"var s = System.String.Join(\", \", elements);"),
                 new Statement($"return $\"{record.Name} {{{{ {{s}} }}}}\";")
             };
@@ -104,9 +121,10 @@ namespace BuilderGenerator
                 contents: statements);
         }
 
-        private MethodDeclaration BuildEqualsMethod(RecordDeclaration record)
+        private static MethodDeclaration BuildEqualsMethod(RecordDeclaration record)
         {
-            var propComparisons = record.RecordProperties.Select(p => $"{Environment.NewLine}&& Equals({p.Name}, other.{p.Name}) ");
+            var propComparisons = record.RecordProperties.Select(p => 
+                $"{Environment.NewLine}&& Equals({p.Name}, other.{p.Name}) ");
 
             var statements = new IWriteableCode[] {
                 new Statement($"return !(other is null) {String.Join("", propComparisons)};")
@@ -122,7 +140,7 @@ namespace BuilderGenerator
                 contents: statements);
         }
 
-        private MethodDeclaration BuildObjectEqualsMethod(RecordDeclaration record)
+        private static MethodDeclaration BuildObjectEqualsMethod(RecordDeclaration record)
         {
             var statements = new IWriteableCode[] {
                 new Statement($"return this.Equals(other as {record.Name});")
@@ -152,7 +170,7 @@ namespace BuilderGenerator
                         isOverride: false,
                         parameters: new Parameter[] {new Parameter("errors", "System.Collections.Generic.IReadOnlyCollection<string>") },
                         contents: new IWriteableCode[] { new Statement("return string.Join(System.Environment.NewLine, errors);")}) },
-                        baseClass: "System.Exception",
+                        inheritsImplements: new[] { "System.Exception" },
                         constructors: new[] { new Constructor(
                             "ValidationException",
                             Visibility.Public,

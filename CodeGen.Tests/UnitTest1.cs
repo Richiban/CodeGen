@@ -26,9 +26,9 @@ namespace CodeGen.Tests
 
             var classDeclaration = ns.ChildNodes().OfType<ClassDeclarationSyntax>().Single();
 
-            var result = sut.GenerateSrcFileContent(classDeclaration, usings);
+            var (name, content) = sut.GenerateSrcFileContent(classDeclaration, usings);
 
-            Console.WriteLine(result);
+            Console.WriteLine(content);
         }
 
         private const string sampleCode = @"

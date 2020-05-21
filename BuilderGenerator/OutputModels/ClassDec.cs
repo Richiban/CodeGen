@@ -9,14 +9,14 @@ namespace BuilderGenerator
             string name,
             IReadOnlyCollection<Constructor>? constructors = null,
             Visibility? visibility = null,
-            string? baseClass = null,
+            string[] inheritsImplements = null,
             bool isPartial = false,
             params IWriteableCode[] contents)
         {
             Name = name;
             Constructors = constructors ?? new Constructor[0];
             Visibility = visibility ?? Visibility.None;
-            BaseClass = baseClass;
+            InheritsImplements = inheritsImplements ?? new string[0];
             IsPartial = isPartial;
             Contents = contents;
         }
@@ -26,7 +26,7 @@ namespace BuilderGenerator
         public Visibility Visibility { get; }
         public bool IsPartial { get; }
         public IReadOnlyCollection<IWriteableCode> Contents { get; }
-        public string? BaseClass { get; }
+        public string[] InheritsImplements { get; }
 
         public void WriteTo(CodeBuilder cb)
         {
@@ -38,9 +38,9 @@ namespace BuilderGenerator
             cb.Append("class ");
             cb.Append(Name);
 
-            if (BaseClass != null)
+            if (InheritsImplements?.Length > 0)
             {
-                cb.Append($" : {BaseClass}");
+                cb.Append($" : {string.Join(", ", InheritsImplements)}");
             }
 
             cb.AppendLine("");
