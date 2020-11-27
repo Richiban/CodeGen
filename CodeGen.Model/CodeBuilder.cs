@@ -11,14 +11,14 @@ namespace BuilderGenerator
 
         public void AppendLine(string s)
         {
-            A();
+            WriteIndentationForLine();
             _sb.AppendLine(s);
             WriteIndentation = true;
         }
 
         public void Append(string s)
         {
-            A();
+            WriteIndentationForLine();
 
             _sb.Append(s);
             WriteIndentation = false;
@@ -44,7 +44,7 @@ namespace BuilderGenerator
             return new CodeBuilderIndentor(this);
         }
 
-        private void A()
+        private void WriteIndentationForLine()
         {
             if (WriteIndentation)
                 foreach (var _ in Enumerable.Range(0, IndentationLevel * 4))

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using BuilderCommon;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -12,8 +11,10 @@ namespace BuilderGenerator
     [Generator]
     public partial class BuilderSourceGenerator : ISourceGenerator
     {
-        public void Execute(SourceGeneratorContext context)
+        public void Execute(GeneratorExecutionContext context)
         {
+            InjectAttribute(context);
+
             foreach (var syntaxTree in context.Compilation.SyntaxTrees)
             {
                 var root = syntaxTree.GetRoot();
@@ -35,15 +36,22 @@ namespace BuilderGenerator
             }
         }
 
-        private static IEnumerable<IPatternGenerator> GetEnhancersFor(ClassDeclarationSyntax c)
+        private void InjectAttribute(GeneratorExecutionContext context)
         {
-            if (c.AttributeLists.HasAttribute(nameof(GenerateBuilderAttribute)))
-            {
-                yield return new BuilderPatternGenerator();
-            }
+            const string primaryConstructorAttributeText = @"using System;
+[AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
+public class GenerateBuilderAttribute : Attribute
+{
+}
+";
+        context.AddSource("GenerateBuilder.g.cs", SourceText.From(primaryConstructorAttributeText, Encoding.UTF8));
         }
 
-        public void Initialize(InitializationContext context)
+        private static IEnumerable<IPatternGenerator> GetEnhancersFor(ClassDeclarationSyntax c)
+        {
+        }
+
+        public void Initialize(GeneratorInitializationContext context)
         {
             // No initialization required for this one
         }
