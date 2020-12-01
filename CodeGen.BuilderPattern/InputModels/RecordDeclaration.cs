@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.BuilderPattern
 {
     public class RecordDeclaration
     {

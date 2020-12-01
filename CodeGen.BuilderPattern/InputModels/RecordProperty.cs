@@ -1,4 +1,4 @@
-﻿namespace BuilderGenerator
+﻿namespace Richiban.CodeGen.BuilderPattern
 {
     public class RecordProperty
     {

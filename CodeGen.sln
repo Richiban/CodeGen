@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen.AutoConstructor", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "Sample\Sample.csproj", "{6AEEE741-8FF9-44CF-987F-C6ECD72D6A8E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen.Tests", "CodeGen.Model.Tests\CodeGen.Tests.csproj", "{69FD0AB1-1A74-45ED-9E87-E19BB98D5897}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen.BuilderPattern", "CodeGen.BuilderPattern\CodeGen.BuilderPattern.csproj", "{7A22CFED-DB25-4CD7-81F9-302AC319AFA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6AEEE741-8FF9-44CF-987F-C6ECD72D6A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AEEE741-8FF9-44CF-987F-C6ECD72D6A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AEEE741-8FF9-44CF-987F-C6ECD72D6A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69FD0AB1-1A74-45ED-9E87-E19BB98D5897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69FD0AB1-1A74-45ED-9E87-E19BB98D5897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69FD0AB1-1A74-45ED-9E87-E19BB98D5897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69FD0AB1-1A74-45ED-9E87-E19BB98D5897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A22CFED-DB25-4CD7-81F9-302AC319AFA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A22CFED-DB25-4CD7-81F9-302AC319AFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A22CFED-DB25-4CD7-81F9-302AC319AFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A22CFED-DB25-4CD7-81F9-302AC319AFA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

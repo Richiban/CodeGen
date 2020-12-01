@@ -5,31 +5,19 @@ namespace Richiban.CodeGen.Model
 {
     public class MethodDeclaration : IWriteableCode
     {
-        public MethodDeclaration(
-            string name,
-            string type,
-            Visibility visibility,
-            bool isStatic,
-            bool isOverride,
-            IReadOnlyCollection<Parameter> parameters,
-            IReadOnlyCollection<IWriteableCode> contents)
+        public MethodDeclaration(string name, string type)
         {
             Name = name;
             Type = type;
-            Visibility = visibility;
-            IsStatic = isStatic;
-            IsOverride = isOverride;
-            Contents = contents;
-            Parameters = parameters;
         }
 
-        public string Name { get; }
-        public string Type { get; }
-        public Visibility Visibility { get; }
-        public bool IsStatic { get; }
-        public bool IsOverride { get; }
-        public IReadOnlyCollection<IWriteableCode> Contents { get; }
-        public IReadOnlyCollection<Parameter> Parameters { get; }
+        public string Name { get; init; }
+        public string Type { get; init; }
+        public Visibility Visibility { get; init; }
+        public bool IsStatic { get; init; }
+        public bool IsOverride { get; init; }
+        public IReadOnlyCollection<IWriteableCode> Contents { get; init; } = new IWriteableCode[] { };
+        public IReadOnlyCollection<Parameter> Parameters { get; init; } = new Parameter[] { };
 
         public void WriteTo(CodeBuilder codeBuilder)
         {

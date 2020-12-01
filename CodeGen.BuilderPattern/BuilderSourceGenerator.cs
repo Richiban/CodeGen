@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.BuilderPattern
 {
     [Generator]
     public partial class BuilderSourceGenerator : ISourceGenerator
@@ -49,6 +49,7 @@ public class GenerateBuilderAttribute : Attribute
 
         private static IEnumerable<IPatternGenerator> GetEnhancersFor(ClassDeclarationSyntax c)
         {
+            return new[] { new BuilderPatternGenerator() };
         }
 
         public void Initialize(GeneratorInitializationContext context)

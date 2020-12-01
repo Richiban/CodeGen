@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Richiban.CodeGen.Model;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.BuilderPattern
 {
     public class BuilderPatternGenerator : IPatternGenerator
     {
@@ -19,7 +19,10 @@ namespace BuilderGenerator
 
             var recordClass = converter.RecordToClass(record);
 
-            var output = new ClassFile(usings, namespaceName, recordClass);
+            var output = new ClassFile(usings, recordClass)
+            { 
+                NamespaceName = namespaceName
+            };
 
             output.WriteTo(cb);
 

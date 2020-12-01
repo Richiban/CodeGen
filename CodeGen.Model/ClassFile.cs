@@ -1,25 +1,27 @@
-﻿namespace Richiban.CodeGen.Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Richiban.CodeGen.Model
 {
     public class ClassFile : IWriteableCode
     {
         private readonly string usings;
-        private readonly string namespaceName;
         private readonly ClassDeclaration classDec;
 
-        public ClassFile(string usings, string namespaceName, ClassDeclaration classDec)
+        public ClassFile(string usings, ClassDeclaration classDec)
         {
             this.usings = usings;
-            this.namespaceName = namespaceName;
             this.classDec = classDec;
         }
+
+        public string? NamespaceName { get; init; }
 
         public void WriteTo(CodeBuilder codeBuilder)
         {
             codeBuilder.AppendLine(usings);
 
-            if (namespaceName != null)
+            if (NamespaceName is not null)
             {
-                codeBuilder.AppendLine($"namespace {namespaceName}");
+                codeBuilder.AppendLine($"namespace {NamespaceName}");
                 codeBuilder.AppendLine("{");
             }
 
@@ -28,7 +30,7 @@
                 classDec.WriteTo(codeBuilder);
             }
 
-            if (namespaceName != null)
+            if (NamespaceName is not null)
             {
                 codeBuilder.AppendLine("}");
             }

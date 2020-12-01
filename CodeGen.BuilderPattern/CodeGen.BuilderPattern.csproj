@@ -4,8 +4,8 @@
     <LangVersion>preview</LangVersion>
     <Nullable>Enable</Nullable>
     
-    <AssemblyName>Richiban.CodeGen</AssemblyName>
-    <RootNamespace>Richiban.CodeGen</RootNamespace>
+    <AssemblyName>Richiban.CodeGen.BuilderPattern</AssemblyName>
+    <RootNamespace>Richiban.CodeGen.BuilderPattern</RootNamespace>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

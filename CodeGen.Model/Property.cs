@@ -4,20 +4,17 @@ namespace Richiban.CodeGen.Model
 {
     public class Property : IWriteableCode
     {
-        public Property(string name, string type, bool hasSetter, Visibility visibility, string defaultValue)
+        public Property(string name, string type)
         {
             Name = name;
             Type = type;
-            HasSetter = hasSetter;
-            Visibility = visibility;
-            DefaultValue = defaultValue;
         }
 
         public string Name { get; }
         public string Type { get; }
-        public bool HasSetter { get; }
-        public Visibility Visibility { get; }
-        public string DefaultValue { get; }
+        public bool HasSetter { get; init; } = false;
+        public Visibility Visibility { get; init; } = Visibility.Public;
+        public string? DefaultValue { get; init; }
 
         public void WriteTo(CodeBuilder codeBuilder)
         {

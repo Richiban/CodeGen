@@ -1,7 +1,7 @@
-using BuilderGenerator;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using Richiban.CodeGen.BuilderPattern;
 using System;
 using System.Linq;
 

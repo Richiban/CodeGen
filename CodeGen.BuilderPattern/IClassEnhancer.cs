@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.BuilderPattern
 {
     interface IPatternGenerator
     {
