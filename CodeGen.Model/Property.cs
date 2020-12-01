@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public class Property : IWriteableCode
     {
-        public Property(string name, string type, bool hasSetter, Visibility visibility, string? defaultValue)
+        public Property(string name, string type, bool hasSetter, Visibility visibility, string defaultValue)
         {
             Name = name;
             Type = type;
@@ -17,7 +17,7 @@ namespace BuilderGenerator
         public string Type { get; }
         public bool HasSetter { get; }
         public Visibility Visibility { get; }
-        public string? DefaultValue { get; }
+        public string DefaultValue { get; }
 
         public void WriteTo(CodeBuilder codeBuilder)
         {

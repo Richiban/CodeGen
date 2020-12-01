@@ -35,8 +35,10 @@ namespace Sample
     //    }
     //}
 
+
+
     [AutoConstructor]
-    public partial class Service
+    partial class Service
     {
         private readonly Guid _data;
 
@@ -51,7 +53,7 @@ namespace Sample
 
             var myDataClass = new Service(Guid.NewGuid());
 
-            Console.WriteLine(myDataClass.PrintData());
+            //Console.WriteLine(myDataClass.PrintData());
         }
     }
 }

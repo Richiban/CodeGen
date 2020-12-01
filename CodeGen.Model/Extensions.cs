@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public static class Extensions
     {

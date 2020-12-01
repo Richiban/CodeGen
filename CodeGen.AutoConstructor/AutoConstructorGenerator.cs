@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
+using Richiban.CodeGen.Model;
+
 namespace Richiban.CodeGen.AutoConstructor
 {
     [Generator]
     public class AutoConstructorGenerator : ISourceGenerator
-    { 
+    {
 
         private const string ShortAttributeName = "AutoConstructor";
 
@@ -43,40 +46,43 @@ public class " + ShortAttributeName + @"Attribute : Attribute
 
         private static string CreatePrimaryConstructor(INamedTypeSymbol classSymbol)
         {
-            string namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
+            var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
 
             var fieldList = classSymbol.GetMembers().OfType<IFieldSymbol>()
                 .Where(x => x.CanBeReferencedByName && x.IsReadOnly)
                 .Select(it => new { Type = it.Type.ToDisplayString(), ParameterName = ToCamelCase(it.Name), it.Name })
                 .ToList();
 
-            var arguments = fieldList.Select(it => $"{it.Type} {it.ParameterName}");
+            var parameters = fieldList.Select(it => new Parameter(it.ParameterName, it.Type)).ToList();
+            var assignments = fieldList.Select(field => new AssignmentStatement($"this.{field.Name}", field.ParameterName)).ToList();
 
-            var source = new StringBuilder($@"namespace {namespaceName}
-{{
-    partial class {classSymbol.Name}
-    {{
-        public {classSymbol.Name}({string.Join(", ", arguments)})
-        {{");
-
-            foreach (var item in fieldList)
+            var @namespace = new NamespaceDeclaration(namespaceName)
             {
-                source.Append($@"
-            if ({item.ParameterName} == null) throw new System.ArgumentNullException(nameof({item.ParameterName}));
-            this.{item.Name} = {item.ParameterName};");
-            }
-            source.Append(@"
-        }
-    }
-}
-");
+                TypeDeclarations = new[]
+                {
+                    new ClassDeclaration(classSymbol.Name)
+                    {
+                        IsPartial = true,
+                        Constructor = new Constructor.BlockConstructor(classSymbol.Name)
+                        {
+                            Parameters = parameters,
+                            Statements = assignments
+                        }
+                    }
+                }
+            };
 
-            return source.ToString();
+            var sourceBuilder = new CodeBuilder();
+
+            @namespace.WriteTo(sourceBuilder);
+
+            return sourceBuilder.ToString();
         }
 
         private static string ToCamelCase(string name)
         {
             name = name.TrimStart('_');
+
             return name.Substring(0, 1).ToLowerInvariant() + name.Substring(1);
         }
 
@@ -88,12 +94,14 @@ public class " + ShortAttributeName + @"Attribute : Attribute
             var attributeSymbol = compilation.GetTypeByMetadataName(ShortAttributeName + "Attribute")!;
 
             var classSymbols = new List<INamedTypeSymbol>();
-            foreach (var clazz in receiver.CandidateClasses)
-            {
-                var model = compilation.GetSemanticModel(clazz.SyntaxTree);
-                var classSymbol = model.GetDeclaredSymbol(clazz)!;
 
-                if (classSymbol!.GetAttributes().Any(ad => ad.AttributeClass!.Equals(attributeSymbol, SymbolEqualityComparer.Default)))
+            foreach (var @class in receiver.CandidateClasses)
+            {
+                var model = compilation.GetSemanticModel(@class.SyntaxTree);
+                var classSymbol = model.GetDeclaredSymbol(@class)!;
+
+                if (classSymbol.GetAttributes()
+                               .Any(ad => ad.AttributeClass!.Equals(attributeSymbol, SymbolEqualityComparer.Default)))
                 {
                     classSymbols.Add(classSymbol);
                 }
@@ -104,7 +112,9 @@ public class " + ShortAttributeName + @"Attribute : Attribute
 
         private static void InjectPrimaryConstructorAttributes(GeneratorExecutionContext context)
         {
-            context.AddSource(ShortAttributeName + "Attribute.g.cs", SourceText.From(primaryConstructorAttributeText, Encoding.UTF8));
+            context.AddSource(
+                ShortAttributeName + "Attribute.g.cs",
+                SourceText.From(primaryConstructorAttributeText, Encoding.UTF8));
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public abstract class Constructor : IWriteableCode
     {
@@ -13,25 +11,16 @@ namespace BuilderGenerator
 
         public class BlockConstructor : Constructor
         {
-            public BlockConstructor(
-                string name,
-                Visibility visibility,
-                IReadOnlyCollection<Parameter> parameters,
-                IReadOnlyCollection<AssignmentStatement> constructorAssignments,
-                IReadOnlyCollection<string>? baseCall = null)
+            public BlockConstructor(string name)
             {
                 Name = name;
-                Visibility = visibility;
-                Parameters = parameters;
-                Statements = constructorAssignments;
-                BaseCall = baseCall;
             }
 
             public string Name { get; }
-            public IReadOnlyCollection<Parameter> Parameters { get; }
-            public IReadOnlyCollection<AssignmentStatement> Statements;
-            public Visibility Visibility { get; }
-            public IReadOnlyCollection<string>? BaseCall { get; }
+            public IReadOnlyCollection<Parameter> Parameters { get; init; } = null!;
+            public IReadOnlyCollection<AssignmentStatement> Statements { get; init; } = null!;
+            public Visibility Visibility { get; init; } = Visibility.Public;
+            public IReadOnlyCollection<string> BaseCall { get; init; } = null!;
 
             public override void WriteTo(CodeBuilder codeBuilder)
             {
@@ -57,7 +46,7 @@ namespace BuilderGenerator
                 {
                     codeBuilder.Append(" : base(");
 
-                    codeBuilder.Append(String.Join(", ", BaseCall));
+                    codeBuilder.Append(string.Join(", ", BaseCall));
 
                     codeBuilder.Append(")");
                 }

@@ -1,4 +1,4 @@
-﻿namespace BuilderGenerator
+﻿namespace Richiban.CodeGen.Model
 {
     public class Statement : IWriteableCode
     {

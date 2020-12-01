@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public class Visibility : IWriteableCode
     {

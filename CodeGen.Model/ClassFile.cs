@@ -1,12 +1,12 @@
-﻿namespace BuilderGenerator
+﻿namespace Richiban.CodeGen.Model
 {
     public class ClassFile : IWriteableCode
     {
         private readonly string usings;
-        private readonly string? namespaceName;
+        private readonly string namespaceName;
         private readonly ClassDeclaration classDec;
 
-        public ClassFile(string usings, string? namespaceName, ClassDeclaration classDec)
+        public ClassFile(string usings, string namespaceName, ClassDeclaration classDec)
         {
             this.usings = usings;
             this.namespaceName = namespaceName;

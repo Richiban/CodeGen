@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public class MethodDeclaration : IWriteableCode
     {
         public MethodDeclaration(
-            string name, 
-            string type, 
+            string name,
+            string type,
             Visibility visibility,
             bool isStatic,
             bool isOverride,
@@ -23,8 +23,8 @@ namespace BuilderGenerator
             Parameters = parameters;
         }
 
-        public String Name { get; }
-        public String Type { get; }
+        public string Name { get; }
+        public string Type { get; }
         public Visibility Visibility { get; }
         public bool IsStatic { get; }
         public bool IsOverride { get; }

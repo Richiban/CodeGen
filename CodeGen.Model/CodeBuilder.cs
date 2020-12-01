@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace BuilderGenerator
+namespace Richiban.CodeGen.Model
 {
     public class CodeBuilder
     {
@@ -24,6 +24,10 @@ namespace BuilderGenerator
             WriteIndentation = false;
         }
 
+        /// <summary>
+        /// Returns the code written to this CodeBuilder
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return _sb.ToString();
