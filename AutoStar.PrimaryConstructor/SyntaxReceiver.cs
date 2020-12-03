@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Richiban.AutoStar.AutoConstructor
+namespace AutoStar.PrimaryConstructor
 {
     internal class SyntaxReceiver : ISyntaxReceiver
     {

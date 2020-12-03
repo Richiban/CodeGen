@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Richiban.AutoStar.Model
+namespace AutoStar.Model
 {
     public class Visibility : IWriteableCode
     {

@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using AutoStar.Common;
+using AutoStar.Model;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using Richiban.AutoStar.BuilderPattern;
-using Richiban.AutoStar.Common;
-using Richiban.AutoStar.Model;
+using System.Linq;
 
-namespace Richiban.AutoStar.AutoConstructor
+namespace AutoStar.PrimaryConstructor
 {
     [Generator]
-    public class AutoConstructorGenerator : CodePatternSourceGeneratorBase
+    public class PrimaryConstructorGenerator : CodePatternSourceGeneratorBase
     {
-        protected override string GeneratorName => nameof(AutoConstructor);
+        protected override string GeneratorName => nameof(PrimaryConstructor);
 
         private static string ToCamelCase(string name)
         {
@@ -31,16 +24,20 @@ namespace Richiban.AutoStar.AutoConstructor
                 .OfType<FieldDeclarationSyntax>()
                 .Where(x => x.Modifiers.Any(y => y.ValueText == "readonly"))
                 .Select(x => x.Declaration)
-                .SelectMany(z => 
-                    z.Variables.Select(aa => new { 
-                        Type = z.Type.ToString(), ParameterName = ToCamelCase(aa.Identifier.ValueText), Name = aa.Identifier.ValueText }))
+                .SelectMany(z =>
+                    z.Variables.Select(aa => new
+                    {
+                        Type = z.Type.ToString(),
+                        ParameterName = ToCamelCase(aa.Identifier.ValueText),
+                        Name = aa.Identifier.ValueText
+                    }))
                 .ToList();
 
             var parameters = fieldList.Select(it => new Parameter(it.ParameterName, it.Type)).ToList();
             var assignments = fieldList.Select(field => new AssignmentStatement($"this.{field.Name}", field.ParameterName)).ToList();
             var className = classDeclaration.Identifier.ValueText;
 
-            var typeFile = new TypeFile(@namespace, new ClassDeclaration(className)
+            var typeFile = new TypeFile(usings, new ClassDeclaration(className)
             {
                 IsPartial = true,
                 Constructor = new Constructor.BlockConstructor(className)
@@ -48,7 +45,10 @@ namespace Richiban.AutoStar.AutoConstructor
                     Parameters = parameters,
                     Statements = assignments
                 }
-            });
+            })
+            {
+                NamespaceName = @namespace
+            };
 
             return new GeneratedFile(typeFile, GeneratorName);
         }

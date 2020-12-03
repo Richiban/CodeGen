@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Richiban.AutoStar.Common
+namespace AutoStar.Common
 {
     public static class Extensions
     {

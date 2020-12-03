@@ -1,4 +1,4 @@
-﻿namespace Richiban.AutoStar.BuilderPattern
+﻿namespace AutoStar.BuilderPattern
 {
     public class RecordProperty
     {

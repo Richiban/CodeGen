@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Richiban.AutoStar.Model
+namespace AutoStar.Model
 {
     public class CodeBuilder
     {

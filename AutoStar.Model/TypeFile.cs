@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Richiban.AutoStar.Model
+namespace AutoStar.Model
 {
     /// <summary>
     /// A representation of a C# file containing a single namespace containing a single type declaration

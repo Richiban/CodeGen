@@ -2,7 +2,7 @@
 
 namespace Sample
 {
-    [BuilderPattern]
+    [AutoStar.BuilderPattern]
     public partial class Person
     {
         public string FirstName { get; }

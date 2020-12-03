@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Richiban.AutoStar.Model
+namespace AutoStar.Model
 {
     public class MethodDeclaration : IWriteableCode
     {

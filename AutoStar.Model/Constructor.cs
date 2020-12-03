@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Richiban.AutoStar.Model
+namespace AutoStar.Model
 {
     public abstract class Constructor : IWriteableCode
     {

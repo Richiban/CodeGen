@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Richiban.AutoStar.Common;
-using Richiban.AutoStar.Model;
+using AutoStar.Common;
+using AutoStar.Model;
 
-namespace Richiban.AutoStar.BuilderPattern
+namespace AutoStar.BuilderPattern
 {
     [Generator]
     public class BuilderPatternGenerator : CodePatternSourceGeneratorBase

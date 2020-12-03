@@ -5,8 +5,8 @@
     
     <Nullable>Enable</Nullable>
     
-    <AssemblyName>Richiban.CodeGen.BuilderPattern</AssemblyName>
-    <RootNamespace>Richiban.CodeGen.BuilderPattern</RootNamespace>
+    <AssemblyName>AutoStar.BuilderPattern</AssemblyName>
+    <RootNamespace>AutoStar.BuilderPattern</RootNamespace>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeGen.Common\CodeGen.Common.csproj" />
-    <ProjectReference Include="..\CodeGen.Model\CodeGen.Model.csproj" />
+    <ProjectReference Include="..\AutoStar.Common\AutoStar.Common.csproj" />
+    <ProjectReference Include="..\AutoStar.Model\AutoStar.Model.csproj" />
   </ItemGroup>
 </Project>

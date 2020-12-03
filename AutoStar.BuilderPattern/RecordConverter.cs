@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Richiban.AutoStar.Model;
+using AutoStar.Model;
 using System;
 using System.Linq;
 
-namespace Richiban.AutoStar.BuilderPattern
+namespace AutoStar.BuilderPattern
 {
     public class RecordConverter
     {

@@ -1,4 +1,4 @@
-﻿namespace Richiban.AutoStar.Model
+﻿namespace AutoStar.Model
 {
     public interface IWriteableCode
     {

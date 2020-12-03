@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9</LangVersion>
-    <RootNamespace>Richiban.CodeGen.AutoConstructor</RootNamespace>
-    <AssemblyName>Richiban.CodeGen.AutoConstructor</AssemblyName>
+    <RootNamespace>AutoStar.PrimaryConstructor</RootNamespace>
+    <AssemblyName>AutoStar.PrimaryConstructor</AssemblyName>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="bin\Debug\net5.0\\Richiban.CodeGen.AutoConstructor.dll" />
+    <None Remove="bin\Debug\net5.0\\AutoStar.AutoConstructor.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeGen.Common\CodeGen.Common.csproj" />
-    <ProjectReference Include="..\CodeGen.Model\CodeGen.Model.csproj" />
+    <ProjectReference Include="..\AutoStar.Common\AutoStar.Common.csproj" />
+    <ProjectReference Include="..\AutoStar.Model\AutoStar.Model.csproj" />
   </ItemGroup>
 </Project>

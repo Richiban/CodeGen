@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using Richiban.AutoStar.Model;
+using AutoStar.Model;
 using System.Text;
 
-namespace Richiban.AutoStar.Common
+namespace AutoStar.Common
 {
     public class GeneratedFile
     {

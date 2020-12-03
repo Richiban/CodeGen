@@ -10,10 +10,9 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../CodeGen.AutoConstructor/CodeGen.AutoConstructor.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../CodeGen.BuilderPattern/CodeGen.BuilderPattern.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../CodeGen.Common/CodeGen.Common.csproj" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../CodeGen.Model/CodeGen.Model.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../AutoStar.PrimaryConstructor/AutoStar.PrimaryConstructor.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../AutoStar.Common/AutoStar.Common.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../AutoStar.Model/AutoStar.Model.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <Target Name="ExcludeGenerated" BeforeTargets="AssignTargetPaths">

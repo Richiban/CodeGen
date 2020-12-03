@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9</LangVersion>
-    <AssemblyName>Richiban.AutoStar.Model</AssemblyName>
-    <RootNamespace>Richiban.AutoStar.Model</RootNamespace>
+    <AssemblyName>AutoStar.Model</AssemblyName>
+    <RootNamespace>AutoStar.Model</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

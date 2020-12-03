@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using Richiban.AutoStar.BuilderPattern;
+using AutoStar.BuilderPattern;
 using System;
 using System.Linq;
 

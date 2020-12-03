@@ -2,10 +2,9 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Richiban.AutoStar.Common;
-using Richiban.AutoStar.Model;
+using AutoStar.Model;
 
-namespace Richiban.AutoStar.BuilderPattern
+namespace AutoStar.Common
 {
     public abstract class CodePatternSourceGeneratorBase : ISourceGenerator
     {
@@ -35,11 +34,10 @@ namespace Richiban.AutoStar.BuilderPattern
         {
             return root.DescendantNodes()
                 .OfType<ClassDeclarationSyntax>()
-                .Where(c => 
+                .Where(c =>
                     c.AttributeLists
                      .SelectMany(list => list.Attributes)
-                     .Any(attr => attr.Name.ToString() == AttributeToInject.TypeDeclaration.Name
-                               || attr.Name.ToString() == GeneratorName));
+                     .Any(attr => attr.Name.ToString() == $"{nameof(AutoStar)}.{GeneratorName}"));
         }
 
         private void InjectAttribute(GeneratorExecutionContext context)
@@ -63,8 +61,11 @@ namespace Richiban.AutoStar.BuilderPattern
                         Arguments = new[] { "AttributeTargets.Class", "Inherited = true", "AllowMultiple = false" }
                     },
                     BaseClass = "Attribute"
-                });
+                })
+            {
+                NamespaceName = nameof(AutoStar)
+            };
 
-        public abstract GeneratedFile GeneratePatternFor(ClassDeclarationSyntax classDeclaration,  string usings, string @namespace);
+        public abstract GeneratedFile GeneratePatternFor(ClassDeclarationSyntax classDeclaration, string usings, string @namespace);
     }
 }
